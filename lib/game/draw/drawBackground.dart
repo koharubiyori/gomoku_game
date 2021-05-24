@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 BoardLayout drawBackground(Canvas canvas, Size screenSize, {
-  double containerPadding = 20,
   double lineWeight = 2
 }) {
   final boardSize = screenSize.width;
+  final double containerPadding = 20;
   final boardTopOffset = (screenSize.height - boardSize) / 2;
   
   { // 绘制背景
@@ -53,23 +53,41 @@ BoardLayout drawBackground(Canvas canvas, Size screenSize, {
     }
   }
 
+  final containerReact = Rect.fromLTWH(0, boardTopOffset, boardSize, boardSize);
+  final gridRect = Rect.fromLTWH(
+    containerPadding, 
+    boardTopOffset + containerPadding, 
+    boardSize - containerPadding,
+    boardSize - containerPadding,
+  );
+
+  final List<List<Offset>> gridOffsets = [];
+  for (var i=0; i < 16; i++) {
+    final row = <Offset>[];
+    gridOffsets.add(row);
+    
+    for (var j=0; j < 16; j++) {
+      final x = gridRect.left + (j * 23.5);
+      final y = gridRect.top + (i * 23.5);
+      row.add(Offset(x, y));
+    }
+  }
+
   return BoardLayout(
-    containerRect: Rect.fromLTWH(0, boardTopOffset, boardSize, boardSize),
-    gridRect: Rect.fromLTWH(
-      containerPadding, 
-      boardTopOffset + containerPadding, 
-      boardSize - containerPadding,
-      boardSize - containerPadding,
-    )
+    containerRect: containerReact,
+    gridRect: gridRect,
+    gridOffsets: gridOffsets
   );
 }
 
 class BoardLayout {
   final Rect containerRect;
   final Rect gridRect;
+  final List<List<Offset>> gridOffsets;
 
-  const BoardLayout({
+  BoardLayout({
     required this.containerRect,
-    required this.gridRect
+    required this.gridRect,
+    required this.gridOffsets
   });
 }

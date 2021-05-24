@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = Get.put(HomePageController());
     
-    Widget radioItem<T>({
+    Widget radioItem<T>({ 
       required T value,
       required String label,
       required T groupValue,
