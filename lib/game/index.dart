@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +9,7 @@ import 'package:gomoku_game/game/pieces.dart';
 class GomokuGame extends Game with TapDetector {
   late Size screenSize;
   late BoardLayout layout;
-  List<List<Pieces?>> piecesList = List.generate(15, (index) => List.filled(15, null));
+  List<List<Pieces?>> piecesList = List.generate(16, (index) => List.filled(16, null));
   late Offset lastPiecesPosition;
 
   @override
@@ -18,7 +17,7 @@ class GomokuGame extends Game with TapDetector {
     underPiecesHandler(details);
   }
 
-  void underPiecesHandler(TapUpDetails details) {
+  void underPiecesHandler(TapUpDetails details) {    
     final position = details.globalPosition; 
     if (position.dy < layout.gridRect.top - 10 || position.dx > layout.gridRect.bottom + 10) return;
     
@@ -71,11 +70,12 @@ class GomokuGame extends Game with TapDetector {
     final hitVerticalIndex = position.dy - adjoinPositions[0][0].dy > (ySpacing / 2) ? 1 : 0;
     
     final hitPosition = adjoinPositionIndexs[hitVerticalIndex][hitHorizontalIndex];
-
+    
     addPieces(hitPosition[1], hitPosition[0], GameSide.Black);
   }
 
   addPieces(int x, int y, GameSide side) {
+    if (piecesList[y][x] == null) return;
     piecesList[y][x] = Pieces(this, side: side, x: x, y: y);
   }
 
